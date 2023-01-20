@@ -1,6 +1,7 @@
 import requests
 import semantic_version
 from dependency_tree.dependency_node import DependencyNode
+from dependency_tree.serialize import serialize
 
 NPM_REGISTRY_API_URL = 'https://registry.npmjs.org/{}'
 
@@ -8,7 +9,7 @@ NPM_REGISTRY_API_URL = 'https://registry.npmjs.org/{}'
 def select_version(semverspec, versions):
     """Select the matching version from versions list, using semverspec as matching scheme"""
     if semverspec == 'latest':
-        return versions[-1]
+        return sorted(versions)[-1]
 
     spec = semantic_version.NpmSpec(semverspec)
 
@@ -22,6 +23,7 @@ def select_version(semverspec, versions):
 
 def fetch_dependency_from_npm_registry(package, parent_semver):
     """Create a dependency graph node for a javascript package"""
+    print("Fetching", package, parent_semver, end='... ')
 
     # Get data from npm registry
     response = requests.get(NPM_REGISTRY_API_URL.format(package))
@@ -41,6 +43,8 @@ def fetch_dependency_from_npm_registry(package, parent_semver):
         dependencies = version_data["dependencies"]
     else:
         dependencies = []
+
+    print("Finished", version)
     # Return a DependencyNode and the dictionary with dependencies
     return node, dependencies
 
@@ -62,7 +66,10 @@ def build_tree_from_npm_registry(package, version):
     return root_node
 
 
-# Testing
+# Create and save dependency tree for some package
 if __name__ == "__main__":
-    node = build_tree_from_npm_registry('react', 'latest')
+    node = build_tree_from_npm_registry('@tensorflow/tfjs', 'latest')
     node.print()
+    serialize(node)
+
+

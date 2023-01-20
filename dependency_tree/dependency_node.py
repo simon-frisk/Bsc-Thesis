@@ -1,4 +1,3 @@
-
 class DependencyNode:
 
     def __init__(self, name, version, parent_semver):
@@ -14,3 +13,4 @@ class DependencyNode:
         print(" "*indent, "{}: {}, (parent: {})".format(self.name, self.version, self.parent_semver))
         for dependency in self.dependencies:
             dependency.print(indent + 2)
+
