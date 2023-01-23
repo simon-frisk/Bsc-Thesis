@@ -6,12 +6,14 @@ from dependency_tree.serialize import serialize
 NPM_REGISTRY_API_URL = 'https://registry.npmjs.org/{}'
 
 
-def select_version(semverspec, versions):
+def select_version(semver_spec, versions):
     """Select the matching version from versions list, using semverspec as matching scheme"""
-    if semverspec == 'latest':
-        return sorted(versions)[-1]
 
-    spec = semantic_version.NpmSpec(semverspec)
+    # TODO: Handle latest and next
+    if semver_spec == 'latest' or semver_spec == 'next':
+        semver_spec = '*'
+
+    spec = semantic_version.NpmSpec(semver_spec)
 
     for version in reversed(versions):
         semver = semantic_version.Version(version)
@@ -68,7 +70,7 @@ def build_tree_from_npm_registry(package, version):
 
 # Create and save dependency tree for some package
 if __name__ == "__main__":
-    node = build_tree_from_npm_registry('@tensorflow/tfjs', 'latest')
+    node = build_tree_from_npm_registry('@tensorflow/tfjs', '0.0.1')
     node.print()
     serialize(node)
 
