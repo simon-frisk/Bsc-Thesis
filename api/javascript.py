@@ -13,6 +13,8 @@ def select_version(semver_spec, versions):
     if semver_spec == 'latest' or semver_spec == 'next':
         semver_spec = '*'
 
+    #Add Regex(?) for <= x <
+
     spec = semantic_version.NpmSpec(semver_spec)
 
     for version in reversed(versions):
@@ -70,8 +72,14 @@ def build_tree_from_npm_registry(package, version):
 
 # Create and save dependency tree for some package
 if __name__ == "__main__":
-    node = build_tree_from_npm_registry('@tensorflow/tfjs', '0.0.1')
-    node.print()
-    serialize(node)
+    #versions =["4.18.2", "5.0.0-beta.1", "3.21.2", "4.0.0", "0.14.1", "1.0.0"] #Versions for Express
+    #versions = ["1.33.0", "1.11.0", "1.1.0", "1.0.1", "0.2.7", "0.0.1"]
+    #versions = ["0.0.1", "0.1.2", "0.14.8", "15.0.0", "15.7.0", "16.0.0-alpha", "17.0.2"]
+
+    package = "react"
+    for version in versions:
+        node = build_tree_from_npm_registry(package, version)
+        node.print()
+        serialize(node)
 
 
