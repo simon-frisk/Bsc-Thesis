@@ -14,3 +14,9 @@ class DependencyNode:
         for dependency in self.dependencies:
             dependency.print(indent + 2)
 
+def depth(node):
+    depths = []
+
+
+
+
