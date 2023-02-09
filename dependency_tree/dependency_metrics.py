@@ -33,6 +33,7 @@ def _dependency_name_list(node, list):
             _dependency_name_list(dependency, list)
 
 def _dependency_compare(node, list, previous_tree_list, parent_name, depth=0):
+    '''Iterative help function that finds new dependencies in a tree'''
     if node.dependencies != []:
         for dependency in node.dependencies:
             if dependency.name not in previous_tree_list:
