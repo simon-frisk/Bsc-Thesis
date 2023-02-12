@@ -8,6 +8,7 @@ NPM_REGISTRY_API_URL = 'https://registry.npmjs.org/{}'
 
 package_cache = {}
 
+
 def select_version(semver_spec, versions, dist_tags):
     """Select the matching version from versions list, using semverspec as matching scheme"""
 
@@ -40,6 +41,7 @@ def select_version(semver_spec, versions, dist_tags):
     else:
         raise Exception(f'No matching version was found: {semver_spec}')
 
+
 def fetch_dependency_from_npm_registry(package):
     """Get package data from npm registry for a javascript package"""
 
@@ -60,7 +62,7 @@ def fetch_dependency_from_npm_registry(package):
 
 
 def select_dependency_version_data(package, parent_semver):
-    '''Create dependency tree node and dependency list for a version of a package'''
+    """Create dependency tree node and dependency list for a version of a package"""
     # Select the correct version of the package
     version = select_version(parent_semver, list(package['versions'].keys()), package['dist-tags'])
     version_data = package['versions'][version]
@@ -87,9 +89,9 @@ def build_nested_dependencies(parent_node, dependency_dict):
 
 
 def select_analyze_versions(package):
-    '''Automatically select which versions should be analyzed'''
+    """Automatically select which versions should be analyzed"""
     versions = package["versions"].keys()
-    versions = list(filter(lambda v: re.match("^\d+.\d+.\d+$", v), versions))
+    versions = list(filter(lambda v: re.match('^\d+.\d+.\d+$', v), versions))
     versions.sort()
     return versions
 
@@ -103,8 +105,9 @@ def select_analyze_versions(package):
             current_major = int(version.split(".")[0])
     return selected_versions
 
+
 def build_from_npm_registry(package):
-    '''Build trees for a package'''
+    """Build trees for a package"""
     root_package = fetch_dependency_from_npm_registry(package)
     versions = select_analyze_versions(root_package)
     print("Selected versions for", package, versions)
@@ -124,10 +127,7 @@ def build_from_npm_registry(package):
 
 
 def load_packages():
-    '''Load and save all packages in packages.txt'''
-
-    # Todo : Make run concurrently, non blocking requests in versions and packages
-
+    """Load and save all packages from packages.txt"""
     packages_file = open("packages.txt", "r")
     packages = packages_file.read().split("\n")
     package_list = []
