@@ -95,16 +95,6 @@ def select_analyze_versions(package):
     versions.sort()
     return versions
 
-    selected_versions = []
-    current_major = -1
-    for (i, version) in enumerate(versions):
-        if int(version.split(".")[0]) != current_major:
-            if current_major != -1:
-                selected_versions.append(versions[i-1])
-            selected_versions.append(version)
-            current_major = int(version.split(".")[0])
-    return selected_versions
-
 
 def build_from_npm_registry(package):
     """Build trees for a package"""
