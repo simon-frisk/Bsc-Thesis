@@ -1,26 +1,38 @@
 import dependency_tree.serialize as serialize
+import dependency_metrics
+import data_util
 import os
 
+serialized_dir = '../serialized/2023-02-12 11:52:58.298705'
 
-def print_all_versions():
-    directory_path = os.path.join('../serialized/prop-types', '')
+
+def get_package(package):
+    versions =[]
+    directory_path = os.path.join(serialized_dir, package)
     files = os.listdir(directory_path)
-    files.sort()
     for file_name in files:
         dep_tree = serialize.load(os.path.join(directory_path, file_name))
-        print(f"\nDependency tree for: {file_name}")
-        dep_tree.print()
+        versions.append(dep_tree)
+    data_util.sort_tree_list(versions)
+    return versions
+
 
 def load_data_set():
-    directory_path = '../serialized'
-    package_dicts = os.listdir(directory_path)
-    for package in package_dicts:
-        package_dir = os.path.join(directory_path, package)
+    data_set = {}
+    package_dicts = os.listdir(serialized_dir)
+    for package_name in package_dicts:
+        package = []
+        package_dir = os.path.join(serialized_dir, package_name)
         files = os.listdir(package_dir)
         files.sort()
         for file_name in files:
             dep_tree = serialize.load(os.path.join(package_dir, file_name))
-            dep_tree.print()
+            package.append(dep_tree)
+        data_set[package_name] = package
+    return data_set
+
+
 
 if __name__ == '__main__':
-    load_data_set()
+    dataset = load_data_set()
+    print(dataset)
