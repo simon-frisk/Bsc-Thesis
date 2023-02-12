@@ -2,8 +2,10 @@ import dependency_tree.serialize as serialize
 import dependency_metrics
 import data_util
 import os
+import analyze_changes
+import size_visualize
 
-serialized_dir = '../serialized/2023-02-12 11:52:58.298705'
+serialized_dir = '../serialized/2023-02-12 15:43:44.961968'
 
 
 def get_package(package):
@@ -32,7 +34,9 @@ def load_data_set():
     return data_set
 
 
-
 if __name__ == '__main__':
+    print("Starting analysis")
+    print("Loading dataset ...")
     dataset = load_data_set()
-    print(dataset)
+    print("Finished loading dataset:", len(dataset), "packages")
+    size_visualize.size_histograms(dataset)

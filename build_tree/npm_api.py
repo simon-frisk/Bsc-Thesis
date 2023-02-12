@@ -50,6 +50,7 @@ def fetch_dependency_from_npm_registry(package):
         return package_cache[package]
 
     # Get data from npm registry
+    print(f"Network request {package}")
     response = requests.get(NPM_REGISTRY_API_URL.format(package))
     if response.status_code != 200:
         raise Exception("Failed to fetch package")
@@ -79,13 +80,15 @@ def select_dependency_version_data(package, parent_semver):
     return node, dependencies
 
 
-def build_nested_dependencies(parent_node, dependency_dict):
+def build_nested_dependencies(parent_node, dependency_dict, parents=[]):
     """Recursive function to fetch and add dependencies to the tree"""
     for dependency in dependency_dict:
+        if dependency in parents:
+            continue
         dependency_package = fetch_dependency_from_npm_registry(dependency)
         dependency_node, nest_dependencies = select_dependency_version_data(dependency_package, dependency_dict[dependency])
         parent_node.add_dependency(dependency_node)
-        build_nested_dependencies(dependency_node, nest_dependencies)
+        build_nested_dependencies(dependency_node, nest_dependencies, parents=[*parents, dependency])
 
 
 def select_analyze_versions(package):
@@ -106,12 +109,13 @@ def build_from_npm_registry(package):
 
     for version in versions:
         try:
+            print(f"Loading {package}, {version} ..................................")
             root_node, root_dependencies = select_dependency_version_data(root_package, version)
             build_nested_dependencies(root_node, root_dependencies)
             trees.append(root_node)
-            print(f'Loaded {package} version {version}')
+            print(f'Loaded {package}, {version}')
         except:
-            print(f'Failed to load {package} version {version}')
+            print(f'Failed to load {package}, {version}')
 
     return trees
 
@@ -122,7 +126,7 @@ def load_packages():
     packages = packages_file.read().split("\n")
     package_list = []
     for package_name in packages:
-        print(f'Loading {package_name} ---------------------------------')
+        print(f'Loading {package_name} -------------------------------------------------------------------------------')
         tree_list = build_from_npm_registry(package_name)
         package_list.append(tree_list)
     serialize(packages, package_list)

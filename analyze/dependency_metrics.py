@@ -5,6 +5,14 @@ def tree_depth_and_edges(node):
     return [max(depth_list), len(depth_list)-1]
 
 
+def tree_size(node):
+    """Takes a root node and return tree size"""
+    size = 1
+    for dependency in node.dependencies:
+        size += tree_size(dependency)
+    return size
+
+
 def _dfs_depth(node, list, depth):
     '''Help function for finding tree depth and edges'''
     if node.dependencies == []:

@@ -1,6 +1,7 @@
 import semantic_version
 from functools import cmp_to_key
 
+
 def get_bumps(tree_list, bump_type):
     '''Return a list of 2-tuples of trees with a version bump of bump_type string(patch, minor, major)'''
     bumps = []
@@ -17,10 +18,12 @@ def get_bumps(tree_list, bump_type):
             bumps.append((prev_tree, current_tree))
     return bumps
 
+
 def _compare_version_key(v1, v2):
     if (semantic_version.Version(v1.version) > semantic_version.Version(v2.version)) == False:
         return -1
     return 1
+
 
 def sort_tree_list(tree_list):
     tree_list.sort(key=cmp_to_key(_compare_version_key))
