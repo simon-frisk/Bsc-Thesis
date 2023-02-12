@@ -2,8 +2,7 @@ import pickle
 
 
 def serialize(dependency_node):
-    name = "{}.{}".format(dependency_node.name.replace("/","."), dependency_node.version)
-    with open("../serialized/{}.txt".format(name), "wb") as outfile:
+    with open(f'../serialized/{dependency_node.name}/{dependency_node.version}.txt', "wb") as outfile:
         pickle.dump(dependency_node, outfile)
 
 
