@@ -5,7 +5,7 @@ import os
 import analyze_changes
 import size_visualize
 
-serialized_dir = '../serialized/2023-02-12 15:43:44.961968'
+serialized_dir = '../serialized/2023-02-12'
 
 
 def get_package(package):
@@ -39,4 +39,4 @@ if __name__ == '__main__':
     print("Loading dataset ...")
     dataset = load_data_set()
     print("Finished loading dataset:", len(dataset), "packages")
-    size_visualize.size_histograms(dataset)
+    analyze_changes.analyze_changes(dataset)
