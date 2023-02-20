@@ -5,8 +5,8 @@ import matplotlib.pyplot as plt
 
 
 def analyze_changes(dataset):
-    total_num_bumps = [0, 0, 0]
-    total_change = [[0, 0], [0, 0], [0, 0]]
+    total_num_bumps = np.zeros(3)
+    total_change = np.zeros((3, 2))
 
     for package in dataset.values():
         major_bumps = data_util.get_bumps(package, 'major')
@@ -32,6 +32,7 @@ def analyze_changes(dataset):
             old_stats = dependency_metrics.tree_depth_and_edges(old)
             new_stats = dependency_metrics.tree_depth_and_edges(new)
             change = np.subtract(new_stats, old_stats)
+            total_change[2] = np.add(change, total_change[2])
             total_change[2] = np.add(change, total_change[2])
 
     print(total_num_bumps, total_change)
