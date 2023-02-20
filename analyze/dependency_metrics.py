@@ -13,6 +13,11 @@ def tree_size(node):
     return size
 
 
+def num_layer1_deps(node):
+    """Calculate number of layer 1 dependencies"""
+    return len(node.dependencies)
+
+
 def _dfs_depth(node, list, depth):
     '''Help function for finding tree depth and edges'''
     if node.dependencies == []:
@@ -33,12 +38,14 @@ def find_new_dependencies(previous_root, new_root):
     _dependency_compare(new_root, new_dependencies, old_tree_dependencies, new_root.name)
     return new_dependencies
 
+
 def _dependency_name_list(node, list):
     '''Help function that transforms dependency tree into a list of all dependency names'''
     list.append(node.name)
     if node.dependencies != []:
         for dependency in node.dependencies:
             _dependency_name_list(dependency, list)
+
 
 def _dependency_compare(node, list, previous_tree_list, parent_name, depth=0):
     '''Iterative help function that finds new dependencies in a tree'''
@@ -48,9 +55,6 @@ def _dependency_compare(node, list, previous_tree_list, parent_name, depth=0):
                 list.append([dependency.name,depth+1,tree_depth_and_edges(dependency),parent_name])
             else:
                 _dependency_compare(dependency, list, previous_tree_list,dependency.name, depth+1)
-
-
-
 
 
 

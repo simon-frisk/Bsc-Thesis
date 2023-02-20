@@ -12,12 +12,44 @@ def latest_version_tree_sizes(dataset):
     return sizes
 
 
-def size_histograms(dataset):
-    sizes = latest_version_tree_sizes(dataset)
-    print(len(sizes))
-    plt.hist(sizes, bins=50)
-    plt.title("Size distribution of tree of latest version in all packages")
+def all_tree_sizes(dataset):
+    sizes = []
+
+    for package in dataset.values():
+        for version in package:
+            size = dependency_metrics.tree_size(version)
+            sizes.append(size)
+    return sizes
+
+
+def all_tree_level1_sizes(dataset):
+    sizes = []
+
+    for package in dataset.values():
+        for version in package:
+            size = dependency_metrics.num_layer1_deps(version)
+            sizes.append(size)
+    return sizes
+
+
+def size_histogram(dataset):
+    sizes = all_tree_sizes(dataset)
+    bin_width = 50
+    plt.hist(sizes, bins=range(min(sizes), max(sizes) + bin_width, bin_width))
+    plt.title("Size distribution of trees")
     plt.ylabel("Number of trees")
     plt.xlabel("Tree size, No. Dependencies")
     plt.yscale('log')
+    plt.grid()
+    plt.show()
+
+
+def layer_1_histogram(dataset):
+    data = all_tree_level1_sizes(dataset)
+    bin_width = 1
+    plt.hist(data, bins=range(min(data), max(data) + bin_width, bin_width))
+    plt.title("Distribution of first layer dependencies")
+    plt.ylabel("Number of trees")
+    plt.xlabel("No. Dependencies")
+    plt.grid()
     plt.show()
