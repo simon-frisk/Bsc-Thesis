@@ -39,4 +39,4 @@ if __name__ == '__main__':
     print("Loading dataset ...")
     dataset = load_data_set()
     print("Finished loading dataset:", len(dataset), "packages")
-    analyze_changes.analyze_changes(dataset)
+    analyze_changes.analyze_changes_where(dataset)

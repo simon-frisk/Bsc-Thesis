@@ -1,3 +1,5 @@
+#import matplotlib.pyplot as plt
+
 def tree_depth_and_edges(node):
     '''Takes a root node and returns a list [tree_depth, tree_edges]'''
     depth_list = []
@@ -48,6 +50,27 @@ def _dependency_compare(node, list, previous_tree_list, parent_name, depth=0):
                 list.append([dependency.name,depth+1,tree_depth_and_edges(dependency),parent_name])
             else:
                 _dependency_compare(dependency, list, previous_tree_list,dependency.name, depth+1)
+
+
+
+'''def depth_and_edge_plot(tree_list):
+    depth_list = []
+    edge_list = []
+    versions = []
+    for package in tree_list:
+        depth_and_edges = tree_depth_and_edges(package)
+        depth_list.append(depth_and_edges[0])
+        edge_list.append(depth_and_edges[1])
+        versions.append(package.version)
+
+    plt.clf()
+    plt.scatter(versions,depth_list)
+    plt.xlabel("versions")
+    plt.ylabel("Depth of tree")
+    plt.show()'''
+
+
+
 
 
 
