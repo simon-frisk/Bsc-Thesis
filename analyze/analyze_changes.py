@@ -1,6 +1,7 @@
 import data_util
 import dependency_metrics
 import numpy as np
+import matplotlib.pyplot as plt
 
 
 def analyze_changes(dataset):
@@ -34,6 +35,35 @@ def analyze_changes(dataset):
             total_change[2] = np.add(change, total_change[2])
 
     print(total_num_bumps, total_change)
+
+
+def analyze_changes_add_subtract(dataset):
+    total_num_bumps = [0, 0, 0]
+    added_deps = [[], [], []]
+    subtracted_deps = [[], [], []]
+
+
+    for package in dataset.values():
+        major_bumps = data_util.get_bumps(package, 'major')
+        minor_bumps = data_util.get_bumps(package, 'minor')
+        patch_bumps = data_util.get_bumps(package, 'patch')
+        total_num_bumps[0] += len(major_bumps)
+        total_num_bumps[1] += len(minor_bumps)
+        total_num_bumps[2] += len(patch_bumps)
+
+        for (old, new) in major_bumps:
+            new_added_dependencies = dependency_metrics.find_new_dependencies(old, new)
+            new_subtracted_dependencies = dependency_metrics.find_new_dependencies(new, old)
+            added_deps[0].append(len(new_added_dependencies))
+            subtracted_deps[0].append(len(new_subtracted_dependencies))
+
+    plt.clf()
+    plt.hist(added_deps[0], bins=20)
+    plt.yscale("log")
+    plt.show()
+
+
+
 
 
 def analyze_changes_where(dataset):
