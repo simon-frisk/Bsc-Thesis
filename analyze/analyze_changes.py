@@ -2,6 +2,7 @@ import data_util
 import dependency_metrics
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib
 
 
 def print_avg_depth_and_num_deps(dataset):
@@ -129,19 +130,132 @@ def analyze_changes_add_subtract(dataset):
         for (old, new) in major_bumps:
             new_added_dependencies = dependency_metrics.find_new_dependencies(old, new)
             new_subtracted_dependencies = dependency_metrics.find_new_dependencies(new, old)
-            added_deps[0].append(len(new_added_dependencies))
-            subtracted_deps[0].append(len(new_subtracted_dependencies))
 
-    plt.clf()
-    plt.hist(added_deps[0], bins=20)
-    plt.yscale("log")
-    plt.show()
+            num_added = 0
+            for add_dep in new_added_dependencies:
+                num_added += add_dep[2][1] + 1
+            added_deps[0].append(num_added)
+            num_subbed = 0
+            for sub_dep in new_subtracted_dependencies:
+                num_subbed += sub_dep[2][1] + 1
+            subtracted_deps[0].append(num_subbed)
+
+        for (old, new) in minor_bumps:
+            new_added_dependencies = dependency_metrics.find_new_dependencies(old, new)
+            new_subtracted_dependencies = dependency_metrics.find_new_dependencies(new, old)
+            added_deps[1].append(len(new_added_dependencies))
+            subtracted_deps[1].append(len(new_subtracted_dependencies))
+
+        for (old, new) in patch_bumps:
+            new_added_dependencies = dependency_metrics.find_new_dependencies(old, new)
+            new_subtracted_dependencies = dependency_metrics.find_new_dependencies(new, old)
+            added_deps[2].append(len(new_added_dependencies))
+            subtracted_deps[2].append(len(new_subtracted_dependencies))
+
+    for added_deps in added_deps:
+        added_deps = list(filter(lambda x : x != 0, added_deps))
+        bin_width = 1
+        plt.hist(added_deps, bins=range(min(added_deps), max(added_deps) + bin_width, bin_width))
+        plt.yscale("log")
+        plt.show()
+
+def analyze_new_dependencies(dataset):
+    depth_in_tree_add = [[], [], []]
+    subtree_size_add = [[], [], []]
+
+    depth_in_tree_sub = [[], [], []]
+    subtree_size_sub = [[], [], []]
+
+    for package in dataset.values():
+        major_bumps = data_util.get_bumps(package, 'major')
+        minor_bumps = data_util.get_bumps(package, 'minor')
+        patch_bumps = data_util.get_bumps(package, 'patch')
+
+        for (old, new) in major_bumps:
+            new_added_dependencies = dependency_metrics.find_new_dependencies(old, new)
+            new_subtracted_dependencies = dependency_metrics.find_new_dependencies(new, old)
+
+            for added_dep in new_added_dependencies:
+                depth_in_tree_add[0].append(added_dep[1])
+                subtree_size_add[0].append(added_dep[2][1])
+
+            for subbed_dep in new_subtracted_dependencies:
+                depth_in_tree_sub[0].append(subbed_dep[1])
+                subtree_size_sub[0].append(subbed_dep[2][1])
+
+        for (old, new) in minor_bumps:
+            new_added_dependencies = dependency_metrics.find_new_dependencies(old, new)
+            new_subtracted_dependencies = dependency_metrics.find_new_dependencies(new, old)
+
+            for added_dep in new_added_dependencies:
+                depth_in_tree_add[1].append(added_dep[1])
+                subtree_size_add[1].append(added_dep[2][1])
+
+            for subbed_dep in new_subtracted_dependencies:
+                depth_in_tree_sub[1].append(subbed_dep[1])
+                subtree_size_sub[1].append(subbed_dep[2][1])
+
+        for (old, new) in patch_bumps:
+            new_added_dependencies = dependency_metrics.find_new_dependencies(old, new)
+            new_subtracted_dependencies = dependency_metrics.find_new_dependencies(new, old)
+
+            for added_dep in new_added_dependencies:
+                depth_in_tree_add[2].append(added_dep[1])
+                subtree_size_add[2].append(added_dep[2][1])
+
+            for subbed_dep in new_subtracted_dependencies:
+                depth_in_tree_sub[2].append(subbed_dep[1])
+                subtree_size_sub[2].append(subbed_dep[2][1])
+
+    titles = ["Major", "Minor", ""]
+    for i in range(3):
+        plt.scatter(depth_in_tree_add[i], subtree_size_add[i])
+        plt.yscale("log")
+        plt.xlabel("Depth added at")
+        plt.ylabel("Size of added subtree")
+        plt.title(f"Scatter plot of depth at which a dependency is added and size of dependency subtree, for {titles[i]} bumps")
+        plt.show()
+
+        crap = np.log(subtree_size_add[i])
+        plt.figure()
+        plt.hist2d(depth_in_tree_add[i], crap, cmin=1, norm=matplotlib.colors.LogNorm(), bins=[8,50], range=[[1,8],[0,5]])
+        plt.xlabel("Depth added at")
+        plt.ylabel("Size of added subtree")
+        plt.colorbar()
+        plt.title(f"2D histogram of scatter plot for {titles[i]} bumps")
+        plt.show()
+
+    for depth in depth_in_tree_add:
+        #depth = list(filter(lambda x : x != 0, depth))
+        bin_width = 1
+        plt.hist(depth, bins=range(min(depth), max(depth) + bin_width, bin_width))
+        #plt.yscale("log")
+        plt.show()
+
+    for size in subtree_size_add:
+        #depth = list(filter(lambda x : x != 0, depth))
+        bin_width = 1
+        plt.hist(size, bins=range(min(size), max(size) + bin_width, bin_width))
+        #plt.yscale("log")
+        plt.show()
+
+    for depth in depth_in_tree_sub:
+        #depth = list(filter(lambda x : x != 0, depth))
+        bin_width = 1
+        plt.hist(depth, bins=range(min(depth), max(depth) + bin_width, bin_width))
+        #plt.yscale("log")
+        plt.show()
+
+    for size in subtree_size_sub:
+        #depth = list(filter(lambda x : x != 0, depth))
+        bin_width = 1
+        plt.hist(size, bins=range(min(size), max(size) + bin_width, bin_width))
+        #plt.yscale("log")
+        plt.show()
 
 
 
-
-
-def analyze_changes_where(dataset):
+'''def analyze_changes_where(dataset):
     total_num_bumps = [0, 0, 0]
     total_change = [[0, 0], [0, 0], [0, 0]]
     total_added_stats = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
@@ -211,7 +325,7 @@ def analyze_changes_where(dataset):
             change = np.subtract(new_stats, old_stats)
             total_change[2] = np.add(change, total_change[2])
 
-            '''new_added_dependencies = dependency_metrics.find_new_dependencies(old, new)
+            new_added_dependencies = dependency_metrics.find_new_dependencies(old, new)
             new_subtracted_dependencies = dependency_metrics.find_new_dependencies(new, old)
             if new_added_dependencies != [] or new_subtracted_dependencies != []:
                 total_num_bumps_w_new_deps[2][2] += 1
@@ -248,9 +362,9 @@ def analyze_changes_where(dataset):
 
                 total_subtracted_stats[2][0] += average_depth_level / subbed_deps
                 total_subtracted_stats[2][1] += average_depth_of_dep / subbed_deps
-                total_subtracted_stats[2][2] += average_edges_of_dep / subbed_deps'''
+                total_subtracted_stats[2][2] += average_edges_of_dep / subbed_deps
 
 
-    print(total_num_bumps, total_change, total_num_bumps_w_new_deps, total_added_stats, total_subtracted_stats)
+    print(total_num_bumps, total_change, total_num_bumps_w_new_deps, total_added_stats, total_subtracted_stats)'''
 
 
