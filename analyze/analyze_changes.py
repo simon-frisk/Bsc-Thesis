@@ -145,22 +145,55 @@ def analyze_changes_add_subtract(dataset):
         for (old, new) in minor_bumps:
             new_added_dependencies = dependency_metrics.find_new_dependencies(old, new)
             new_subtracted_dependencies = dependency_metrics.find_new_dependencies(new, old)
-            added_deps[1].append(len(new_added_dependencies))
-            subtracted_deps[1].append(len(new_subtracted_dependencies))
 
-        for (old, new) in patch_bumps:
+            num_added = 0
+            for add_dep in new_added_dependencies:
+                num_added += add_dep[2][1] + 1
+            added_deps[1].append(num_added)
+            num_subbed = 0
+            for sub_dep in new_subtracted_dependencies:
+                num_subbed += sub_dep[2][1] + 1
+            subtracted_deps[1].append(num_subbed)
+
+        for (old, new) in minor_bumps:
             new_added_dependencies = dependency_metrics.find_new_dependencies(old, new)
             new_subtracted_dependencies = dependency_metrics.find_new_dependencies(new, old)
-            added_deps[2].append(len(new_added_dependencies))
-            subtracted_deps[2].append(len(new_subtracted_dependencies))
 
+            num_added = 0
+            for add_dep in new_added_dependencies:
+                num_added += add_dep[2][1] + 1
+            added_deps[2].append(num_added)
+            num_subbed = 0
+            for sub_dep in new_subtracted_dependencies:
+                num_subbed += sub_dep[2][1] + 1
+            subtracted_deps[2].append(num_subbed)
+
+    titles = ["major", "minor", "patch"]
+    i=0
     for added_deps in added_deps:
         added_deps = list(filter(lambda x: x != 0, added_deps))
-        bin_width = 1
+        bin_width = 5
         plt.hist(added_deps, bins=range(min(added_deps), max(added_deps) + bin_width, bin_width))
         plt.yscale("log")
+        plt.xscale("log")
+        plt.ylabel("Frequency, log scale")
+        plt.xlabel("# of added deps")
+        plt.title(f"Number of added dependencies in {titles[i]} bumps")
         plt.show()
+        i+=1
 
+    i=0
+    for subbed in subtracted_deps:
+        added_deps = list(filter(lambda x: x != 0, subbed))
+        bin_width = 5
+        plt.hist(added_deps, bins=range(min(added_deps), max(added_deps) + bin_width, bin_width))
+        plt.yscale("log")
+        plt.xscale("log")
+        plt.ylabel("Frequency, log scale")
+        plt.xlabel("#of removed dependencies")
+        plt.title(f"Number of removed dependencies in {titles[i]} bumps")
+        plt.show()
+        i+=1
 
 def analyze_new_dependencies(dataset):
     depth_in_tree_add = [[], [], []]
