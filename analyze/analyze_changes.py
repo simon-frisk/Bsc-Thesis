@@ -118,7 +118,6 @@ def analyze_changes_add_subtract(dataset):
     added_deps = [[], [], []]
     subtracted_deps = [[], [], []]
 
-
     for package in dataset.values():
         major_bumps = data_util.get_bumps(package, 'major')
         minor_bumps = data_util.get_bumps(package, 'minor')
