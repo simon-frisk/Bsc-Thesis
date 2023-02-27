@@ -214,45 +214,64 @@ def analyze_new_dependencies(dataset):
         plt.yscale("log")
         plt.xlabel("Depth added at")
         plt.ylabel("Size of added subtree")
-        plt.title(f"Scatter plot of depth at which a dependency is added and size of dependency subtree, for {titles[i]} bumps")
+        plt.title(f"Depth at which a dependency is added vs Size of dependency subtree, for {titles[i]} bumps")
         plt.show()
 
         crap = np.log(subtree_size_add[i])
         plt.figure()
         plt.hist2d(depth_in_tree_add[i], crap, cmin=1, norm=matplotlib.colors.LogNorm(), bins=[8,50], range=[[1,8],[0,5]])
         plt.xlabel("Depth added at")
-        plt.ylabel("Size of added subtree")
+        plt.ylabel("Size of added subtree; log scale")
         plt.colorbar()
         plt.title(f"2D histogram of scatter plot for {titles[i]} bumps")
         plt.show()
 
+    i =0
     for depth in depth_in_tree_add:
         #depth = list(filter(lambda x : x != 0, depth))
         bin_width = 1
         plt.hist(depth, bins=range(min(depth), max(depth) + bin_width, bin_width))
-        #plt.yscale("log")
+        plt.ylabel("Frequency")
+        plt.xlabel("Depth added at")
+        plt.title(f"Depth level at which new subtrees are added at for {titles[i]} bumps")
         plt.show()
+        i+=1
 
+    i=0
     for size in subtree_size_add:
         #depth = list(filter(lambda x : x != 0, depth))
-        bin_width = 1
+        bin_width = 10
         plt.hist(size, bins=range(min(size), max(size) + bin_width, bin_width))
+        plt.ylabel("Frequency")
+        plt.xlabel("Size of added subtree")
+        plt.title(f"Size of new added subtrees for {titles[i]} bumps")
         #plt.yscale("log")
         plt.show()
+        i+=1
 
+    i=0
     for depth in depth_in_tree_sub:
         #depth = list(filter(lambda x : x != 0, depth))
         bin_width = 1
         plt.hist(depth, bins=range(min(depth), max(depth) + bin_width, bin_width))
+        plt.ylabel("Frequency")
+        plt.xlabel("Depth removed at")
+        plt.title(f"Depth level at which new subtrees are removed for {titles[i]} bumps")
         #plt.yscale("log")
         plt.show()
+        i+=1
 
+    i=0
     for size in subtree_size_sub:
         #depth = list(filter(lambda x : x != 0, depth))
-        bin_width = 1
+        bin_width = 25
         plt.hist(size, bins=range(min(size), max(size) + bin_width, bin_width))
+        plt.ylabel("Frequency")
+        plt.xlabel("Size of removed subtree")
+        plt.title(f"Size of removed subtrees for {titles[i]} bumps")
         #plt.yscale("log")
         plt.show()
+        i+=1
 
 
 
