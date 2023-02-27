@@ -51,22 +51,24 @@ def histogram_changes(dataset):
             num_deps_changes[2].append(dependency_metrics.tree_size(new) - dependency_metrics.tree_size(old))
 
     for layer_1_changes, bump_type, bins in zip(layer_1_changes, ["major", "minor", "patch"], [20, 20, 10]):
+        plt.figure()
         plt.hist(layer_1_changes, bins=bins)
         plt.title(bump_type)
         plt.ylabel("Number of trees")
         plt.xlabel("Change in layer 1 dependencies")
         plt.yscale('log')
         plt.grid()
-        plt.show()
+        plt.savefig(f"../plots/Layer 1 Changes {bump_type}.png")
 
     for num_deps_changes, bump_type, bins in zip(num_deps_changes, ["major", "minor", "patch"], [20, 100, 100]):
+        plt.figure()
         plt.hist(num_deps_changes, bins=bins)
         plt.title(bump_type)
         plt.ylabel("Number of trees")
         plt.xlabel("Change in num dependencies")
         plt.yscale('log')
         plt.grid()
-        plt.show()
+        plt.savefig(f"../plots/Num deps Changes {bump_type}.png")
 
 
 def print_avg_change_patches(dataset):
@@ -244,8 +246,9 @@ def analyze_new_dependencies(dataset):
         plt.hist(size, bins=range(min(size), max(size) + bin_width, bin_width))
         plt.ylabel("Frequency")
         plt.xlabel("Size of added subtree")
+        plt.yscale("log")
+        plt.xscale("log")
         plt.title(f"Size of new added subtrees for {titles[i]} bumps")
-        #plt.yscale("log")
         plt.show()
         i+=1
 
@@ -269,7 +272,8 @@ def analyze_new_dependencies(dataset):
         plt.ylabel("Frequency")
         plt.xlabel("Size of removed subtree")
         plt.title(f"Size of removed subtrees for {titles[i]} bumps")
-        #plt.yscale("log")
+        plt.yscale("log")
+        plt.xscale("log")
         plt.show()
         i+=1
 
