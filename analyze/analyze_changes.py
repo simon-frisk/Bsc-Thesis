@@ -2,6 +2,7 @@ import data_util
 import dependency_metrics
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib
 
 
 def print_avg_depth_and_num_deps(dataset):
@@ -206,12 +207,22 @@ def analyze_new_dependencies(dataset):
                 depth_in_tree_sub[2].append(subbed_dep[1])
                 subtree_size_sub[2].append(subbed_dep[2][1])
 
-
+    titles = ["Major", "Minor", ""]
     for i in range(3):
         plt.scatter(depth_in_tree_add[i], subtree_size_add[i])
         plt.yscale("log")
         plt.xlabel("Depth added at")
         plt.ylabel("Size of added subtree")
+        plt.title(f"Scatter plot of depth at which a dependency is added and size of dependency subtree, for {titles[i]} bumps")
+        plt.show()
+
+        crap = np.log(subtree_size_add[i])
+        plt.figure()
+        plt.hist2d(depth_in_tree_add[i], crap, cmin=1, norm=matplotlib.colors.LogNorm(), bins=[8,50], range=[[1,8],[0,5]])
+        plt.xlabel("Depth added at")
+        plt.ylabel("Size of added subtree")
+        plt.colorbar()
+        plt.title(f"2D histogram of scatter plot for {titles[i]} bumps")
         plt.show()
 
     for depth in depth_in_tree_add:
