@@ -34,7 +34,7 @@ def all_tree_level1_sizes(dataset):
 
 def size_histogram(dataset):
     sizes = all_tree_sizes(dataset)
-    bin_width = 50
+    bin_width = 100
     plt.hist(sizes, bins=range(min(sizes), max(sizes) + bin_width, bin_width))
     plt.title("Size distribution of trees")
     plt.ylabel("Number of trees")

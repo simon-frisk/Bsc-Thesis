@@ -153,11 +153,12 @@ def analyze_changes_add_subtract(dataset):
             subtracted_deps[2].append(len(new_subtracted_dependencies))
 
     for added_deps in added_deps:
-        added_deps = list(filter(lambda x : x != 0, added_deps))
+        added_deps = list(filter(lambda x: x != 0, added_deps))
         bin_width = 1
         plt.hist(added_deps, bins=range(min(added_deps), max(added_deps) + bin_width, bin_width))
         plt.yscale("log")
         plt.show()
+
 
 def analyze_new_dependencies(dataset):
     depth_in_tree_add = [[], [], []]
@@ -207,7 +208,7 @@ def analyze_new_dependencies(dataset):
                 depth_in_tree_sub[2].append(subbed_dep[1])
                 subtree_size_sub[2].append(subbed_dep[2][1])
 
-    titles = ["Major", "Minor", ""]
+    titles = ["Major", "Minor", "Patch"]
     for i in range(3):
         plt.scatter(depth_in_tree_add[i], subtree_size_add[i])
         plt.yscale("log")
