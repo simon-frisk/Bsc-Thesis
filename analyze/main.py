@@ -4,6 +4,7 @@ import data_util
 import os
 import analyze_changes
 import size_visualize
+import find_common_deps
 
 serialized_dir = '../serialized/2023-02-12'
 
@@ -40,12 +41,14 @@ if __name__ == '__main__':
     dataset = load_data_set()
     print("Finished loading dataset:", len(dataset), "packages")
     # Metrics about the trees
-    analyze_changes.print_avg_layer_1_deps(dataset)
-    analyze_changes.print_avg_depth_and_num_deps(dataset)
+    #analyze_changes.print_avg_layer_1_deps(dataset)
+    #analyze_changes.print_avg_depth_and_num_deps(dataset)
     #size_visualize.size_histogram(dataset)
     #size_visualize.layer_1_histogram(dataset)
     # Metrics about bumps
     #analyze_changes.print_avg_change_patches(dataset)
     #analyze_changes.analyze_new_dependencies(dataset)
-    analyze_changes.analyze_changes_add_subtract(dataset)
-    analyze_changes.histogram_changes(dataset)
+    #analyze_changes.analyze_changes_add_subtract(dataset)
+    #analyze_changes.histogram_changes(dataset)
+    print(find_common_deps.dep_dict_stats(dataset))
+    print(find_common_deps.total_number_of_deps(dataset))
