@@ -5,6 +5,7 @@ import os
 import analyze_changes
 import size_visualize
 import find_common_deps
+import size_compare
 
 serialized_dir = '../serialized/2023-02-12'
 
@@ -52,5 +53,6 @@ if __name__ == '__main__':
     #analyze_changes.histogram_changes(dataset)
     #print(find_common_deps.dep_dict_stats(dataset))
     #print(find_common_deps.total_number_of_deps(dataset))
-    print(find_common_deps.print_tree(dataset))
+    #print(find_common_deps.print_tree(dataset))
     #print(size_visualize.all_tree_sizes(dataset))
+    size_compare.size_list(dataset)
