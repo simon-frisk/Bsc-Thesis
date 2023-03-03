@@ -48,4 +48,27 @@ def _dfs_name_search(node, list):
             _dfs_name_search(dependency, list)
 
 
+def print_tree(dataset):
+    dep_list = []
+    dep_list_copy = []
+    for package in dataset.values():
+        if package[0].name == 'mongodb':
+            for version in package:
+                if version.version == '4.14.0':
+                    _print_tree_help(version, dep_list_copy, 0)
+                    dep_list_copy.append(version.version)
+                '''if len(dep_list) > len(dep_list_copy):
+                    dep_list_copy = dep_list.copy()
+                    dep_list = []'''
 
+
+    #dep_list_copy.sort()
+    print(dep_list_copy)
+    print(len(dep_list_copy))
+    return
+
+def _print_tree_help(node, list, depth):
+    list.append([node.name, depth])
+    if node.dependencies != []:
+        for dependency in node.dependencies:
+            _print_tree_help(dependency, list, depth+1)
