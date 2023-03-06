@@ -1,5 +1,7 @@
 
 def dependency_dictionary(dataset):
+    '''Creates a dictionary of all the different dependencies in the dataset where every
+    dependency contains a list of the packages where this dependency is called'''
     dep_dict = {}
 
     for package in dataset.values():
@@ -10,6 +12,7 @@ def dependency_dictionary(dataset):
     return dep_dict
 
 def _dict_add(node, dict, package_name):
+    '''Help function for generating dependency dictionary'''
     if node.name in dict.keys():
         if package_name not in dict[node.name]:
             dict[node.name].append(package_name)
@@ -21,6 +24,7 @@ def _dict_add(node, dict, package_name):
             _dict_add(dependency, dict, package_name)
 
 def dep_dict_stats(dataset):
+    '''returns information on dependencies'''
     dep_dict = dependency_dictionary(dataset)
     number_of_packages = []
     for key in dep_dict.keys():
@@ -28,10 +32,11 @@ def dep_dict_stats(dataset):
 
     number_of_packages.sort()
 
-    return number_of_packages[-10:], len(number_of_packages)
+    return number_of_packages[-10:], len(number_of_packages) #10 most used dependencies, total number of dependencies in entire dataset
 
 
 def total_number_of_deps(dataset):
+    '''Returns list of all dependencies in dataset'''
     list_of_unique_dependencies = []
     for package in dataset.values():
         for version in package:
@@ -41,6 +46,7 @@ def total_number_of_deps(dataset):
     return(list_of_unique_dependencies)
 
 def _dfs_name_search(node, list):
+    '''Help function for deps list above'''
     if node.name not in list:
         list.append(node.name)
     if node.dependencies != []:

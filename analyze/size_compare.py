@@ -1,5 +1,6 @@
 
 def size_list(dataset):
+    '''Correct function for finding the size (number of nodes) of a tree'''
     size_list = []
     for package in dataset.values():
         dep_list = []
@@ -16,6 +17,7 @@ def size_list(dataset):
     return
 
 def _get_size(node, list):
+    '''help function for size function above'''
     if node.name not in list:
         list.append(node.name)
     if node.dependencies != []:
@@ -24,6 +26,7 @@ def _get_size(node, list):
 
 
 def depth_of_tree(node):
+    '''Correct function for finding the depth of a tree'''
     dep_list = []
     depth_dictionary = {}
     _dfs_depth(dep_list, depth_dictionary, node, 0)
@@ -36,6 +39,7 @@ def depth_of_tree(node):
 
 
 def _dfs_depth(list, dictionary, node, depth):
+    '''help function for depth function above'''
     if node.name not in list:
         list.append(node.name)
         dictionary[node.name] = depth
