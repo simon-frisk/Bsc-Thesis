@@ -18,7 +18,9 @@ def all_tree_sizes(dataset):
     for package in dataset.values():
         for version in package:
             size = dependency_metrics.tree_size(version)
-            sizes.append(size)
+            sizes.append([size, version.name])
+            #sizes.append(size)
+    sizes.sort()
     return sizes
 
 
