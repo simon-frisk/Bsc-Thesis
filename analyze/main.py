@@ -6,6 +6,7 @@ import analyze_changes
 import size_visualize
 import find_common_deps
 import common_deps_visualize
+import common_deps_parents
 
 serialized_dir = '../serialized/2023-02-12'
 
@@ -56,9 +57,10 @@ if __name__ == '__main__':
     #analyze_changes.analyze_changes_add_subtract(dataset)
     #analyze_changes.histogram_changes(dataset)
     x = find_common_deps.dependency_dictionary(dataset)
-    common_deps_visualize.histogram(x)
+    common_deps_parents.common_deps_parents(dataset, ["minimist"])
+    #common_deps_visualize.histogram(x)
     #print(find_common_deps.dependency_dictionary_with_versions(dataset))
-    print(find_common_deps.dep_dict_stats(dataset))
+    #print(find_common_deps.dep_dict_stats(dataset))
     #print(find_common_deps.total_number_of_deps(dataset))
     #print(find_common_deps.print_tree(dataset))
     #print(size_visualize.all_tree_sizes(dataset))
