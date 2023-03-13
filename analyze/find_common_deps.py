@@ -40,24 +40,28 @@ def dep_dict_stats(dataset):
 def dependency_dictionary_with_versions(dataset):
     dep_dict = {}
     for package in dataset.values():
-        for version in package:
-            _dict_add_versions(version, dep_dict, version.name, version.version)
+        #for version in package:
+            #_dict_add_versions(version, dep_dict, version.name, version.version, depth=0)
+        _dict_add_versions(package[-1], dep_dict, package[-1].name, package[-1].version, depth=0)
     return dep_dict
 
-def _dict_add_versions(node, dictionary, package_name, package_version):
+def _dict_add_versions(node, dictionary, package_name, package_version, depth):
     if node.name in dictionary.keys():
         if package_name in dictionary[node.name].keys():
-            if package_version not in dictionary[node.name][package_name]:
-                dictionary[node.name][package_name].append(package_version)
+            if package_version in dictionary[node.name][package_name].keys():
+                if dictionary[node.name][package_name][package_version] > depth:
+                    dictionary[node.name][package_name][package_version] = depth
+            else:
+                dictionary[node.name][package_name][package_version] = depth
+
         else:
-            dictionary[node.name][package_name] = [package_version]
+            dictionary[node.name][package_name] = {package_version:depth}
     else:
-        dictionary[node.name] = {package_name:[package_version]}
+        dictionary[node.name] = {package_name:{package_version:depth}}
 
     if node.dependencies != []:
         for dependency in node.dependencies:
-            _dict_add_versions(dependency, dictionary, package_name, package_version)
-
+            _dict_add_versions(dependency, dictionary, package_name, package_version, depth+1)
 
 
 
@@ -83,12 +87,14 @@ def _dfs_name_search(node, list):
 
 def print_tree(dataset):
     dep_list = []
-    dep_list_copy = []
+
     for package in dataset.values():
-        if package[0].name == 'ember-cli-babel':
+        if package[0].name == 'handlebars':
             for version in package:
-                if version.version == '7.26.11':
+                if version.version == '4.7.7':
+                    dep_list_copy = []
                     _print_tree_help(version, dep_list_copy, 0)
+                    version.print()
                     dep_list_copy.append(version.version)
                 '''if len(dep_list) > len(dep_list_copy):
                     dep_list_copy = dep_list.copy()
