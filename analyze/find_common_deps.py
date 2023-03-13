@@ -5,7 +5,7 @@ def dependency_dictionary(dataset):
     dep_dict = {}
 
     for package in dataset.values():
-        print('package')
+        #print('package')
         for version in package:
             _dict_add(version, dep_dict, version.name)
 
@@ -32,7 +32,30 @@ def dep_dict_stats(dataset):
 
     number_of_packages.sort()
 
-    return number_of_packages[-10:], len(number_of_packages) #10 most used dependencies, total number of dependencies in entire dataset
+    return number_of_packages[-500:], len(number_of_packages) #10 most used dependencies, total number of dependencies in entire dataset
+
+def dependency_dictionary_with_versions(dataset):
+    dep_dict = {}
+    for package in dataset.values():
+        for version in package:
+            _dict_add_versions(version, dep_dict, version.name, version.version)
+    return dep_dict
+
+def _dict_add_versions(node, dictionary, package_name, package_version):
+    if node.name in dictionary.keys():
+        if package_name in dictionary[node.name].keys():
+            if package_version not in dictionary[node.name][package_name]:
+                dictionary[node.name][package_name].append(package_version)
+        else:
+            dictionary[node.name][package_name] = [package_version]
+    else:
+        dictionary[node.name] = {package_name:[package_version]}
+
+    if node.dependencies != []:
+        for dependency in node.dependencies:
+            _dict_add_versions(dependency, dictionary, package_name, package_version)
+
+
 
 
 def total_number_of_deps(dataset):
