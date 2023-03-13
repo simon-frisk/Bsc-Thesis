@@ -1,6 +1,6 @@
 
 def size_list(dataset):
-    '''Correct function for finding the size (number of nodes) of a tree'''
+    '''Function which finds the size (number of unique dependencies) of the latest versions in the dataset'''
     size_list = []
     for package in dataset.values():
         dep_list = []
@@ -17,7 +17,7 @@ def size_list(dataset):
     return
 
 def _get_size(node, list):
-    '''help function for size function above'''
+    '''help function for generating true size of trees'''
     if node.name not in list:
         list.append(node.name)
     if node.dependencies != []:
@@ -53,3 +53,4 @@ def _dfs_depth(list, dictionary, node, depth):
 
 def size_compare():
     biggest_packages = ['ember-cli-babel', 'yeoman-generator', 'webpack', 'mocha', 'yargs', 'gulp-util', 'inquirer', 'express', 'superagent', 'winston', 'shelljs', 'yosay','mongodb', 'vue','aws-sdk','cheerio','body-parser','redis']
+    
