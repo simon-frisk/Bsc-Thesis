@@ -1,15 +1,16 @@
 
+
 def dependency_dictionary(dataset):
     '''Creates a dictionary of all the different dependencies in the dataset where every
     dependency contains a list of the packages where this dependency is called'''
     dep_dict = {}
 
     for package in dataset.values():
-        print('package')
         for version in package:
             _dict_add(version, dep_dict, version.name)
 
     return dep_dict
+
 
 def _dict_add(node, dict, package_name):
     '''Help function for generating dependency dictionary'''
@@ -22,6 +23,7 @@ def _dict_add(node, dict, package_name):
     if node.dependencies != []:
         for dependency in node.dependencies:
             _dict_add(dependency, dict, package_name)
+
 
 def dep_dict_stats(dataset):
     '''returns information on dependencies'''
@@ -44,6 +46,7 @@ def total_number_of_deps(dataset):
 
     print(len(list_of_unique_dependencies))  #2008 unique dependencies (including 100 packages)
     return(list_of_unique_dependencies)
+
 
 def _dfs_name_search(node, list):
     '''Help function for deps list above'''
@@ -72,6 +75,7 @@ def print_tree(dataset):
     print(dep_list_copy)
     print(len(dep_list_copy))
     return
+
 
 def _print_tree_help(node, list, depth):
     list.append([node.name, depth])
