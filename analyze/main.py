@@ -65,4 +65,5 @@ if __name__ == '__main__':
     #find_common_deps.print_dict(dataset)
     #print(size_visualize.all_tree_sizes(dataset))
     #size_compare.size_list(dataset)
-    print(better_metrics.depth_of_common_dependencies(dataset))
+    #print(better_metrics.depth_of_common_dependencies(dataset))
+    print(better_metrics.stats_for_most_common_deps(dataset))
