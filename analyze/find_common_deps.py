@@ -67,6 +67,23 @@ def _dict_add_versions(node, dictionary, package_name, package_version, depth):
         for dependency in node.dependencies:
             _dict_add_versions(dependency, dictionary, package_name, package_version, depth+1)
 
+def dep_dict_stats_versions(dataset, simplify=0):
+    dict = dependency_dictionary_with_versions(dataset)
+    most_popular_list = []
+    for info in dep_dict_stats(dataset):
+        key = info[1]
+        most_popular_list.append(key)
+
+    most_popular_dict = {key: dict[key] for key in most_popular_list}
+
+    if simplify == 1:
+        for unique_dependency in most_popular_dict.keys():
+            for unique_package in most_popular_dict[unique_dependency].keys():
+                #total_number_of_versions = #Want to find what percentage of major/minor/patch bump versions the dependency appears in
+                most_popular_dict[unique_dependency][unique_package] = len(most_popular_dict[unique_dependency][unique_package].keys())
+
+    return most_popular_dict
+
 
 
 def total_number_of_deps(dataset):

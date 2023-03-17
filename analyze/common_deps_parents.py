@@ -9,7 +9,7 @@ def common_deps_parents(dataset, dependencies):
     # List containing dictionary mapping from parent package name to number of times
     # the dependency has that parent
     dependency_parents = [{} for _ in dependencies]
-    # Create a dictionary for fast finding of whether a dependency in dependencies and it's index
+    # Create a dictionary for fast finding of whether a dependency in dependencies and its index
     dependency_hash = {}
     for i, dep in enumerate(dependencies):
         dependency_hash[dep] = i
