@@ -8,6 +8,7 @@ import find_common_deps
 import common_deps_visualize
 import better_metrics
 import common_deps_parents
+import Violin_plots
 
 serialized_dir = '../serialized/2023-02-12'
 
@@ -76,7 +77,7 @@ if __name__ == '__main__':
 
     #To show Benoit 3/15/23
     
-    print(find_common_deps.dep_dict_stats(dataset))
+    '''print(find_common_deps.dep_dict_stats(dataset))
     print(find_common_deps.dep_dict_stats(dataset, 1))
     print(find_common_deps.dep_dict_stats_versions(dataset, 1))
     input()
@@ -87,4 +88,6 @@ if __name__ == '__main__':
     input()
     print(better_metrics.depth_of_common_dependencies(dataset, 0))
     print(better_metrics.depth_of_common_dependencies(dataset, 1))
-    print(better_metrics.stats_for_most_common_deps(dataset))
+    print(better_metrics.stats_for_most_common_deps(dataset))'''
+
+    Violin_plots.violin_plots(dataset)
