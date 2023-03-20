@@ -8,7 +8,9 @@ import find_common_deps
 import common_deps_visualize
 import better_metrics
 import common_deps_parents
-import Violin_plots
+import violin_plots
+import matplotlib.pyplot as plt
+import timeline_plot
 
 serialized_dir = '../serialized/2023-02-12'
 
@@ -90,4 +92,5 @@ if __name__ == '__main__':
     print(better_metrics.depth_of_common_dependencies(dataset, 1))
     print(better_metrics.stats_for_most_common_deps(dataset))'''
 
-    Violin_plots.violin_plots(dataset)
+    #violin_plots.violin_plots(dataset)
+    timeline_plot.timeline_plot(dataset)
