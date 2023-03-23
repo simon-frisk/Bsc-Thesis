@@ -11,6 +11,7 @@ import common_deps_parents
 import violin_plots
 import matplotlib.pyplot as plt
 import timeline_plot
+import dependency_exists_plot
 
 serialized_dir = '../serialized/2023-02-12'
 
@@ -93,4 +94,5 @@ if __name__ == '__main__':
     print(better_metrics.stats_for_most_common_deps(dataset))'''
 
     #violin_plots.violin_plots(dataset)
-    timeline_plot.timeline_plot(dataset)
+    #timeline_plot.timeline_plot(dataset)
+    dependency_exists_plot.existence_timeline_plot(dataset)
