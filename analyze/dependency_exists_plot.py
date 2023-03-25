@@ -51,3 +51,8 @@ def existence_timeline_plot(dataset):
     ax.set_yticks(y_tick_placements, labels=y_tick_names)
     ax.set_xlabel("Lifetime of package (% of versions)")
     plt.show()
+
+
+    #stroke parameter
+    # add color based on depth level
+
