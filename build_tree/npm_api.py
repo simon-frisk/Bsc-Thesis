@@ -1,6 +1,8 @@
 import requests
 import re
+import os
 import semantic_version
+import subprocess
 from dependency_tree.dependency_node import DependencyNode
 from dependency_tree.serialize import serialize
 
@@ -132,9 +134,32 @@ def load_packages():
     serialize(packages, package_list)
 
 
-# Create and save dependency trees
+def package_load_git_repos():
+    """
+    Clone git repos for all packages
+    """
+    packages_file = open("packages.txt", "r")
+    packages = packages_file.read().split("\n")
+    already_downloaded = os.listdir("../git")
+
+    for package_name in packages:
+        try:
+            if package_name in already_downloaded:
+                continue
+            package_json = fetch_dependency_from_npm_registry(package_name)
+            raw_url = package_json['repository']['url']
+            if raw_url[3] == '+':
+                url = raw_url[4:]
+            elif raw_url[3] == ':':
+                url = 'https://' + raw_url[6:]
+            process = subprocess.Popen(["git", "clone", url, f"../git/{package_name}"])
+            print(process.pid)
+        except:
+            print(f"Error {package_name}")
+
+
 if __name__ == "__main__":
-    load_packages()
+    package_load_git_repos()
 
 
 
