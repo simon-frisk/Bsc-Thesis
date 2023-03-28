@@ -8,6 +8,10 @@ import find_common_deps
 import common_deps_visualize
 import better_metrics
 import common_deps_parents
+import violin_plots
+import matplotlib.pyplot as plt
+import timeline_plot
+import dependency_exists_plot
 
 serialized_dir = '../serialized/2023-02-12'
 
@@ -59,14 +63,36 @@ if __name__ == '__main__':
     #analyze_changes.histogram_changes(dataset)
     #x = find_common_deps.dependency_dictionary(dataset)
     #common_deps_visualize.histogram(x)
-    x = find_common_deps.dependency_dictionary(dataset)
-    common_deps_parents.common_deps_parents(dataset, ["minimist"])
+    #x = find_common_deps.dependency_dictionary(dataset, 1)
+    #common_deps_parents.common_deps_parents(dataset, ["minimist", "inherits"])
     #common_deps_visualize.histogram(x)
     #print(find_common_deps.dependency_dictionary_with_versions(dataset))
+    #print(find_common_deps.dep_dict_stats_versions(dataset, 1))
     #print(find_common_deps.dep_dict_stats(dataset))
     #print(find_common_deps.total_number_of_deps(dataset))
     #print(find_common_deps.print_tree(dataset))
     #find_common_deps.print_dict(dataset)
     #print(size_visualize.all_tree_sizes(dataset))
     #size_compare.size_list(dataset)
-    print(better_metrics.depth_of_common_dependencies(dataset))
+    #print(better_metrics.depth_of_common_dependencies(dataset, 0))
+    #print(better_metrics.stats_for_most_common_deps(dataset))
+
+
+    #To show Benoit 3/15/23
+    
+    '''print(find_common_deps.dep_dict_stats(dataset))
+    print(find_common_deps.dep_dict_stats(dataset, 1))
+    print(find_common_deps.dep_dict_stats_versions(dataset, 1))
+    input()
+    x = find_common_deps.dependency_dictionary(dataset)
+    common_deps_visualize.histogram(x)
+    x = find_common_deps.dependency_dictionary(dataset,1) #Latest versions only
+    common_deps_visualize.histogram(x)
+    input()
+    print(better_metrics.depth_of_common_dependencies(dataset, 0))
+    print(better_metrics.depth_of_common_dependencies(dataset, 1))
+    print(better_metrics.stats_for_most_common_deps(dataset))'''
+
+    #violin_plots.violin_plots(dataset)
+    #timeline_plot.timeline_plot(dataset)
+    dependency_exists_plot.existence_timeline_plot(dataset)

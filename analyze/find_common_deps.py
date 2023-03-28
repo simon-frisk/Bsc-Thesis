@@ -1,14 +1,16 @@
 
 
-def dependency_dictionary(dataset):
+def dependency_dictionary(dataset, latest=0):
     '''Creates a dictionary of all the different dependencies in the dataset where every
     dependency contains a list of the packages where this dependency is called'''
     dep_dict = {}
 
     for package in dataset.values():
-        for version in package:
-            _dict_add(version, dep_dict, version.name)
-        #_dict_add(package[-1], dep_dict, package[-1].name) #Most recent version of packages
+        if latest == 0:
+            for version in package:
+                _dict_add(version, dep_dict, version.name)
+        else:
+            _dict_add(package[-1], dep_dict, package[-1].name) #Most recent version of packages
 
     return dep_dict
 
@@ -26,23 +28,25 @@ def _dict_add(node, dict, package_name):
             _dict_add(dependency, dict, package_name)
 
 
-def dep_dict_stats(dataset):
+def dep_dict_stats(dataset, latest=0):
     '''returns information on dependencies'''
-    dep_dict = dependency_dictionary(dataset)
+    dep_dict = dependency_dictionary(dataset, latest)
     number_of_packages = []
     for key in dep_dict.keys():
         number_of_packages.append([len(dep_dict[key]), key])
 
     number_of_packages.sort()
 
-    return number_of_packages[-50:], len(number_of_packages) #10 most used dependencies, total number of dependencies in entire dataset
+    return number_of_packages[-10:] #10 most used dependencies
 
-def dependency_dictionary_with_versions(dataset):
+def dependency_dictionary_with_versions(dataset, latest=0):
     dep_dict = {}
     for package in dataset.values():
-        #for version in package:
-            #_dict_add_versions(version, dep_dict, version.name, version.version, depth=0)
-        _dict_add_versions(package[-1], dep_dict, package[-1].name, package[-1].version, depth=0)
+        if latest==0:
+            for version in package:
+                _dict_add_versions(version, dep_dict, version.name, version.version, depth=0)
+        else:
+            _dict_add_versions(package[-1], dep_dict, package[-1].name, package[-1].version, depth=0)
     return dep_dict
 
 def _dict_add_versions(node, dictionary, package_name, package_version, depth):
@@ -62,6 +66,23 @@ def _dict_add_versions(node, dictionary, package_name, package_version, depth):
     if node.dependencies != []:
         for dependency in node.dependencies:
             _dict_add_versions(dependency, dictionary, package_name, package_version, depth+1)
+
+def dep_dict_stats_versions(dataset, simplify=0):
+    dict = dependency_dictionary_with_versions(dataset)
+    most_popular_list = []
+    for info in dep_dict_stats(dataset):
+        key = info[1]
+        most_popular_list.append(key)
+
+    most_popular_dict = {key: dict[key] for key in most_popular_list}
+
+    if simplify == 1:
+        for unique_dependency in most_popular_dict.keys():
+            for unique_package in most_popular_dict[unique_dependency].keys():
+                #total_number_of_versions = #Want to find what percentage of major/minor/patch bump versions the dependency appears in
+                most_popular_dict[unique_dependency][unique_package] = len(most_popular_dict[unique_dependency][unique_package].keys())
+
+    return most_popular_dict
 
 
 
