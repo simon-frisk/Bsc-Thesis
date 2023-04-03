@@ -30,7 +30,7 @@ def dependency_exists(package, dict, dependency="inherits"):
 
         '''if is_switch and index != 0 and previous_included == True:
             depth = dict[dependency][package][version]
-            if depth == 1:
+            if depth == 1:g
                 bar_segments_first.append((current_segment_start * step_length, (index - current_segment_start) * step_length))
             if depth == 2:
                 bar_segments_second.append((current_segment_start * step_length, (index - current_segment_start) * step_length))
