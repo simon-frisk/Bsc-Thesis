@@ -96,3 +96,5 @@ if __name__ == '__main__':
     #violin_plots.violin_plots(dataset)
     #timeline_plot.timeline_plot(dataset)
     dependency_exists_plot.existence_timeline_plot(dataset)
+    #a = find_common_deps.dependency_dictionary_with_versions(dataset)
+    #print(a['inherits']['aws-sdk']['2.1174.0'])
