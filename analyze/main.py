@@ -52,6 +52,10 @@ if __name__ == '__main__':
     dataset = load_data_set()
     print("Finished loading dataset:", len(dataset), "packages")
     # Metrics about the trees
+    num = 0
+    for package in dataset.values():
+        num += len(package)
+    print(f"Number of trees {num}")
     #analyze_changes.print_avg_layer_1_deps(dataset)
     #analyze_changes.print_avg_depth_and_num_deps(dataset)
     #size_visualize.size_histogram(dataset)

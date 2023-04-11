@@ -2,6 +2,7 @@ import find_common_deps
 import size_compare
 import common_deps_parents
 
+
 def depth_of_common_dependencies(dataset, latest):
     '''Returns a dictionary with all unique dependencies as keys, and a list of the average depth
     per package in which they appear as values'''
@@ -22,6 +23,7 @@ def depth_of_common_dependencies(dataset, latest):
     #print(dependency_dictionary["minimist"])
     #print(dependency_dictionary["mkdirp"])
     return depth_dictionary
+
 
 def stats_for_most_common_deps(dataset):
     list_of_most_common_deps = find_common_deps.dep_dict_stats(dataset, 1)

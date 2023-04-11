@@ -31,8 +31,10 @@ def _dfs_depth(node, list, depth):
 
 
 def find_new_dependencies(previous_root, new_root):
-    '''Given two trees, function returns a list of lists consisting of new dependencies in the tree,
-    in the form of [dependency name, depth level in tree, [depth,edges]of branch below new dependency, parent dependency name'''
+    '''
+    Given two trees, function returns a list of lists consisting of new dependencies in the tree,
+    in the form of [dependency name, depth level in tree, [depth,edges]of branch below new dependency, parent dependency name
+    '''
     #Should it just return the branch instead?
     old_tree_dependencies = []
     _dependency_name_list(previous_root, old_tree_dependencies)
