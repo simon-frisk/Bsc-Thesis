@@ -88,13 +88,16 @@ if __name__ == '__main__':
     common_deps_visualize.histogram(x)
     x = find_common_deps.dependency_dictionary(dataset,1) #Latest versions only
     common_deps_visualize.histogram(x)
-    input()
-    print(better_metrics.depth_of_common_dependencies(dataset, 0))
+    input()'''
+    '''print(better_metrics.depth_of_common_dependencies(dataset, 0))
     print(better_metrics.depth_of_common_dependencies(dataset, 1))
-    print(better_metrics.stats_for_most_common_deps(dataset))'''
-
+    print(better_metrics.stats_for_most_common_deps(dataset))
+    print(find_common_deps.dependency_dictionary(dataset, 1))'''
+    print(better_metrics.depth_of_common_dependencies(dataset, 0))
+    #print(find_common_deps.dep_dict_stats(dataset, 0))
+    #print(find_common_deps.dep_dict_stats(dataset,1))
     #violin_plots.violin_plots(dataset)
-    timeline_plot.timeline_scatter_plot_size_split(dataset)
+    #timeline_plot.timeline_plot(dataset)
     #dependency_exists_plot.existence_timeline_plot(dataset)
     #a = find_common_deps.dependency_dictionary_with_versions(dataset)
-    #print(a['inherits']['aws-sdk']['2.1174.0'])
+    #print(a['inherits']['aws-sdk'])

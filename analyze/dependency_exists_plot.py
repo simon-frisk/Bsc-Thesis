@@ -12,6 +12,7 @@ def dependency_exists(package, dict, dependency="inherits"):
     strokes = []
     previous_included = False
     current_segment_start = 0
+    first =0
     for index, version in enumerate(package):
         is_included = _dep_exists(version, dependency)
         #is_switch = previous_included != is_included
@@ -22,29 +23,29 @@ def dependency_exists(package, dict, dependency="inherits"):
         if is_included:
             depth = dict[dependency][package[0].name][version.version]
             if depth == 1:
-                bar_segments_first.append((index*step_length, step_length))
+                bar_segments_first.append(((index-1)*step_length, step_length))
+                if index ==0:
+                    first=1
             elif depth == 2:
-                bar_segments_second.append((index*step_length, step_length))
+                bar_segments_second.append(((index-1)*step_length, step_length))
+                if index ==0:
+                    first =2
             else:
-                bar_segments_third_plus.append((index*step_length, step_length))
+                bar_segments_third_plus.append(((index-1)*step_length, step_length))
+                if index == 0:
+                    first =3
 
-        '''if is_switch and index != 0 and previous_included == True:
-            depth = dict[dependency][package][version]
-            if depth == 1:g
-                bar_segments_first.append((current_segment_start * step_length, (index - current_segment_start) * step_length))
-            if depth == 2:
-                bar_segments_second.append((current_segment_start * step_length, (index - current_segment_start) * step_length))
-        if is_switch:
-            current_segment_start = index
-        previous_included = is_included
-    if previous_included == True:
-        bar_segments.append((current_segment_start * step_length, (len(package) - current_segment_start - 1) * step_length))'''
 
-    #print(bar_segments_first)
-    #print(bar_segments_second)
-    #print(bar_segments_third_plus)
-    return bar_segments_first[:-1], bar_segments_second[:-1], bar_segments_third_plus[:-1], num_versions
 
+    if len(bar_segments_first)>1 or len(bar_segments_second)>1 or len(bar_segments_third_plus)>1:
+        if first == 1:
+            return bar_segments_first[1:], bar_segments_second, bar_segments_third_plus, num_versions
+        elif first ==2:
+            return bar_segments_first, bar_segments_second[1:], bar_segments_third_plus, num_versions
+        else:
+            return bar_segments_first, bar_segments_second, bar_segments_third_plus[1:], num_versions
+    else:
+        return bar_segments_first, bar_segments_second, bar_segments_third_plus, num_versions
 
 def _dep_exists(node, dep_name):
     if node.name == dep_name:
@@ -56,7 +57,7 @@ def _dep_exists(node, dep_name):
     return False
 
 
-def existence_timeline_plot(dataset):
+def existence_timeline_plot(dataset, dependency="inherits"):
     dependency_dict = find_common_deps.dependency_dictionary_with_versions(dataset)
     fig, ax = plt.subplots()
     y_tick_placements = []
@@ -65,7 +66,7 @@ def existence_timeline_plot(dataset):
     y_tick_place_sizes = []
     skips = 0
     for index, package in enumerate(dataset.values()):
-        first_layer, second_layer, third_layer, num_versions = dependency_exists(package, dependency_dict)
+        first_layer, second_layer, third_layer, num_versions = dependency_exists(package, dependency_dict, dependency)
         if first_layer == [] and second_layer == [] and third_layer ==[]:
             skips += 1
             continue
@@ -75,8 +76,12 @@ def existence_timeline_plot(dataset):
         y_tick_placements.append((index-skips)*5 + 6.5)
         y_tick_names.append(package[0].name)
         y_tick_place_sizes.append((index-skips)*5 + 6.5)
-        y_tick_sizes.append(num_versions)
-    y_tick_place_sizes.append(123)
+        percent_included = round((len(dependency_dict[dependency][package[0].name].keys())/(num_versions))*100, 2)
+        '''if package[0].name == 'ember-cli-babel' or :
+            percent_included = 100'''
+        y_tick_sizes.append(str(num_versions) + " (" + str(percent_included) + ")")
+
+    y_tick_place_sizes.append(5*(len(y_tick_names)+1.63))
     y_tick_sizes.append("")
 
     ax.set_yticks(y_tick_placements, labels=y_tick_names)
@@ -84,7 +89,7 @@ def existence_timeline_plot(dataset):
     ax.set_ylabel("Name of package")
     ax2 = ax.twinx()
     ax2.set_yticks(y_tick_place_sizes, labels=y_tick_sizes)
-    ax2.set_ylabel("Number of Versions")
+    ax2.set_ylabel("Total Number of Versions of Package (% including dep)")
     blue_patch = mpatches.Patch(color='tab:blue', label='First layer dep')
     red_patch = mpatches.Patch(color='tab:red', label='Second layer dep')
     green_patch = mpatches.Patch(color='tab:green', label='Third+ layer dep')
