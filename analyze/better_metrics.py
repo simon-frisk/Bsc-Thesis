@@ -46,6 +46,9 @@ def stats_for_most_common_deps(dataset):
 
 
 def first_layer_at_any_point(dataset):
+    dependency_dictionary = find_common_deps.dependency_dictionary_with_versions(dataset, 0)
+
+
     return
 
 

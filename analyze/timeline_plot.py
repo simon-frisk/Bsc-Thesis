@@ -111,17 +111,17 @@ def timeline_plot(dataset):
     y_tick_placements =[]
     fig, ax = plt.subplots()
     for i, package in enumerate(dataset.values()):
-        x, y, max, min = existence_timeline(package, 1.5*i)
+        x, y, max, min = existence_timeline(package, i)
         name_ticks.append(package[0].name)
         min_max_ticks.append("("+str(min) + ", " +str(max) +")")
         ax.plot(x, y)
-        y_tick_placements.append(1.5*i)
-        ax.axhline((1.5*i - .5), 0, 1, linestyle="--", color='black')
-    ax.set_yticks(y_tick_placements, labels=name_ticks)
+        #y_tick_placements.append(1.5*i)
+        #ax.axhline((1.5*i - .5), 0, 1, linestyle="--", color='gray', linewidth=1)
+    #ax.set_yticks(y_tick_placements, labels=name_ticks)
     ax.set_ylabel("Name of Package")
     ax.set_xlim([-0.02,1.02])
     ax2 = ax.twinx()
-    ax2.set_yticks(y_tick_placements, labels=min_max_ticks)
+    #ax2.set_yticks(y_tick_placements, labels=min_max_ticks)
     ax2.set_ylabel("(Minimum, Maximum) number of unique dependencies")
     plt.show()
 
