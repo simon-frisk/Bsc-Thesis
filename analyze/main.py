@@ -97,7 +97,9 @@ if __name__ == '__main__':
     #print(find_common_deps.dep_dict_stats(dataset, 0))
     #print(find_common_deps.dep_dict_stats(dataset,1))
     #violin_plots.violin_plots(dataset)
-    timeline_plot.timeline_plot(dataset)
-    #dependency_exists_plot.existence_timeline_plot(dataset, "ms")
+    #timeline_plot.timeline_plot(dataset)
+    dependency_exists_plot.existence_timeline_plot(dataset, "inherits")
     #a = find_common_deps.dependency_dictionary_with_versions(dataset)
     #print(a['inherits']['aws-sdk'])
+
+

@@ -100,8 +100,10 @@ def existence_timeline(package, offset):
         number_of_dependencies.append(size)
         if size > max: max = size
         if size < min: min = size
+    num_deps_copy = number_of_dependencies.copy()
     for i in range(len(number_of_dependencies)):
         number_of_dependencies[i] = (number_of_dependencies[i] - min) / max + offset
+        num_deps_copy[i] = (number_of_dependencies[i] - min)
     return X, number_of_dependencies, max, min
 
 
@@ -112,15 +114,15 @@ def timeline_plot(dataset):
     fig, ax = plt.subplots()
     for i, package in enumerate(dataset.values()):
         x, y, max, min = existence_timeline(package, 2*i)
-        name_ticks.append(package[0].name)
+        name_ticks.append(package[0].name + " (" + str(len(package)) + ")")
         min_max_ticks.append("("+str(min) + ", " +str(max) +")")
         ax.axhline((2 * i), 0, 1, linestyle="--", color='lightgray', linewidth=1)
         ax.axhline((2 * i + 1), 0, 1, linestyle="--", color='lightgray', linewidth=1)
         ax.plot(x, y)
         y_tick_placements.append((2*i+.5))
-
     ax.set_yticks(y_tick_placements, labels=name_ticks)
-    ax.set_ylabel("Name of Package")
+    ax.set_ylabel("Name of Package (# Versions)")
+    ax.set_xlabel("Lifetime of Package")
     ax.set_xlim([0,1])
     y_tick_placements.append(133.3)
     min_max_ticks.append("")
