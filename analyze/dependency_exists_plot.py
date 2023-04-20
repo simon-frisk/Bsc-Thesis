@@ -35,8 +35,6 @@ def dependency_exists(package, dict, dependency="inherits"):
                 if index == 0:
                     first =3
 
-
-
     if len(bar_segments_first)>1 or len(bar_segments_second)>1 or len(bar_segments_third_plus)>1:
         if first == 1:
             return bar_segments_first[1:], bar_segments_second, bar_segments_third_plus, num_versions
@@ -65,21 +63,32 @@ def existence_timeline_plot(dataset, dependency="inherits"):
     y_tick_sizes = []
     y_tick_place_sizes = []
     skips = 0
+    all_info = []
     for index, package in enumerate(dataset.values()):
         first_layer, second_layer, third_layer, num_versions = dependency_exists(package, dependency_dict, dependency)
         if first_layer == [] and second_layer == [] and third_layer ==[]:
             skips += 1
             continue
-        ax.broken_barh(first_layer, ((index-skips)*5 + 5,3), facecolors ='tab:blue')
-        ax.broken_barh(second_layer, ((index - skips) * 5 + 5, 3), facecolors='tab:red')
-        ax.broken_barh(third_layer, ((index-skips)*5 + 5,3), facecolors='tab:green')
-        y_tick_placements.append((index-skips)*5 + 6.5)
-        y_tick_names.append(package[0].name)
-        y_tick_place_sizes.append((index-skips)*5 + 6.5)
-        percent_included = round((len(dependency_dict[dependency][package[0].name].keys())/(num_versions))*100, 2)
+        percent_included = round((len(dependency_dict[dependency][package[0].name].keys()) / (num_versions)) * 100, 2)
+        all_info.append([percent_included, first_layer, second_layer, third_layer, package[0].name, num_versions])
+
+    all_info.sort()
+    i =0
+    for info in all_info:
+        first_layer = info[1]
+        second_layer = info[2]
+        third_layer = info[3]
+        ax.broken_barh(first_layer, ((i)*5 + 5,3), facecolors ='tab:blue')
+        ax.broken_barh(second_layer, ((i) * 5 + 5, 3), facecolors='tab:red')
+        ax.broken_barh(third_layer, ((i)*5 + 5,3), facecolors='tab:green')
+        y_tick_placements.append((i)*5 + 6.5)
+        y_tick_names.append(info[4])
+        y_tick_place_sizes.append((i)*5 + 6.5)
+
         '''if package[0].name == 'ember-cli-babel' or :
             percent_included = 100'''
-        y_tick_sizes.append(str(num_versions) + " (" + str(percent_included) + ")")
+        y_tick_sizes.append(str(info[5]) + " (" + str(info[0]) + ")")
+        i+=1
 
     y_tick_place_sizes.append(5*(len(y_tick_names)+1.63))
     y_tick_sizes.append("")

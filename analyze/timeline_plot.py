@@ -24,8 +24,8 @@ def timeline_scatter_plot(dataset):
     fig, ax = plt.subplots()
     for package in dataset.values():
         x,y = existence_timeline_scatter(package)
-        ax.scatter(x,y, s=4)
-        #ax.plot(x,y)
+        #ax.scatter(x,y, s=4)
+        ax.plot(x,y)
         all_x += x
         all_y += y
     b, a = np.polyfit(np.array(all_x), np.array(all_y), deg=1)
@@ -87,12 +87,14 @@ def timeline_scatter_plot_size_split(dataset):
     return
 
 
-def existence_timeline(package, offset):
+def existence_timeline(package):
     num_versions = len(package)
     X = [i / (num_versions - 1) for i in range(num_versions)]
     number_of_dependencies = []
     max = 0
     min = 10000000
+    previous_size = -1
+    jumps = 0
     for version in package:
         unique_deps = []
         violin_plots._number_of_deps(version, unique_deps)
@@ -100,11 +102,21 @@ def existence_timeline(package, offset):
         number_of_dependencies.append(size)
         if size > max: max = size
         if size < min: min = size
+        if version.name == 'yosay':
+            print(previous_size)
+            print(size)
+            print('-------')
+        if previous_size == -1:
+            previous_size = size
+        if size != previous_size:
+            jumps+=1
+            previous_size=size
+
     num_deps_copy = number_of_dependencies.copy()
     for i in range(len(number_of_dependencies)):
-        number_of_dependencies[i] = (number_of_dependencies[i] - min) / max + offset
+        number_of_dependencies[i] = (number_of_dependencies[i] - min) / max
         num_deps_copy[i] = (number_of_dependencies[i] - min)
-    return X, number_of_dependencies, max, min
+    return X, number_of_dependencies, max, min, jumps
 
 
 def timeline_plot(dataset):
@@ -112,14 +124,34 @@ def timeline_plot(dataset):
     min_max_ticks = []
     y_tick_placements =[]
     fig, ax = plt.subplots()
+    info_list = []
     for i, package in enumerate(dataset.values()):
-        x, y, max, min = existence_timeline(package, 2*i)
-        name_ticks.append(package[0].name + " (" + str(len(package)) + ")")
-        min_max_ticks.append("("+str(min) + ", " +str(max) +")")
-        ax.axhline((2 * i), 0, 1, linestyle="--", color='lightgray', linewidth=1)
-        ax.axhline((2 * i + 1), 0, 1, linestyle="--", color='lightgray', linewidth=1)
-        ax.plot(x, y)
+        x, y, max, min, jumps = existence_timeline(package)
+        name_tick = package[0].name + " (" + str(len(package)) + ")"
+        #name_ticks.append(package[0].name + " (" + str(len(package)) + ")")
+        #min_max_ticks.append("("+str(min) + ", " +str(max) +")")
+        #ax.axhline((2 * i), 0, 1, linestyle="--", color='lightgray', linewidth=1)
+        #ax.axhline((2 * i + 1), 0, 1, linestyle="--", color='lightgray', linewidth=1)
+        #ax.plot(x, y)
+        info_list.append([jumps, x, y, max, min, name_tick])
         y_tick_placements.append((2*i+.5))
+
+    info_list.sort()
+    count =0
+    for package_info in info_list:
+        x = package_info[1]
+        number_of_deps = package_info[2]
+        for ii in range(len(number_of_deps)):
+            number_of_deps[ii] += 2*count
+        ax.plot(x, number_of_deps, color="gray")
+        ax.axhline((2 * count), 0, 1, linestyle="--", color='lightgray', linewidth=1)
+        ax.axhline((2 * count + 1), 0, 1, linestyle="--", color='lightgray', linewidth=1)
+        name_ticks.append(package_info[5])
+        min_max_ticks.append(str(package_info[0]) + ", (" + str(package_info[4]) + ", " + str(package_info[3]) + ")")
+        count +=1
+
+
+
     ax.set_yticks(y_tick_placements, labels=name_ticks)
     ax.set_ylabel("Name of Package (# Versions)")
     ax.set_xlabel("Lifetime of Package")
@@ -130,7 +162,7 @@ def timeline_plot(dataset):
     min_max_ticks.append("")
     ax2 = ax.twinx()
     ax2.set_yticks(y_tick_placements, labels=min_max_ticks)
-    ax2.set_ylabel("(Minimum, Maximum) number of unique dependencies")
+    ax2.set_ylabel("# of Jumps, (Min, Max #Dependencies)")
     plt.show()
 
 
