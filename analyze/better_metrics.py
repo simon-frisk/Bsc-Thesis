@@ -18,6 +18,8 @@ def depth_of_common_dependencies(dataset, latest):
             if depths_in_versions == []:
                 continue
             average_depths_in_package.append(sum(depths_in_versions)/len(depths_in_versions))
+        if average_depths_in_package != []:
+            average_depths_in_package.append([sum(average_depths_in_package)/len(average_depths_in_package)])
         depth_dictionary[unique_dependency] = average_depths_in_package
 
     #print(dependency_dictionary["minimist"])
@@ -45,7 +47,9 @@ def stats_for_most_common_deps(dataset):
     return(common_deps_with_stats_list)
 
 
-
+def first_layer_at_any_point(dataset):
+    dependency_dictionary = find_common_deps.dependency_dictionary_with_versions(dataset, 0)
+    return
 
 
 

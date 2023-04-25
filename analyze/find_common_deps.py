@@ -37,7 +37,7 @@ def dep_dict_stats(dataset, latest=0):
 
     number_of_packages.sort()
 
-    return number_of_packages[-10:] #10 most used dependencies
+    return number_of_packages #10 most used dependencies
 
 
 def dependency_dictionary_with_versions(dataset, latest=0):

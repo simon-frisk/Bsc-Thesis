@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "Frisk"
+  given-names: "Simon"
+- family-names: "Bruno"
+  given-names: "Folke"
+title: "Bsc-Thesis Code Repository"
+version: 1.0.0
+date-released: 2023-04-12
+url: "https://github.com/simon-frisk/Bsc-Thesis"
