@@ -140,7 +140,7 @@ def package_load_git_repos():
     """
     packages_file = open("packages.txt", "r")
     packages = packages_file.read().split("\n")
-    already_downloaded = os.listdir("../git")
+    already_downloaded = os.listdir("../repos")
 
     for package_name in packages:
         try:

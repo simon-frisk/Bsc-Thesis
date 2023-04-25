@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 
+
 def dependency_exists(package, dependency="inherits"):
     num_versions = len(package)
     step_length = 1 / (num_versions - 1)

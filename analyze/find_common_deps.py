@@ -1,8 +1,8 @@
 
 
 def dependency_dictionary(dataset, latest=0):
-    '''Creates a dictionary of all the different dependencies in the dataset where every
-    dependency contains a list of the packages where this dependency is called'''
+    """Creates a dictionary of all the different dependencies in the dataset where every
+    dependency contains a list of the packages where this dependency is called"""
     dep_dict = {}
 
     for package in dataset.values():
@@ -16,7 +16,7 @@ def dependency_dictionary(dataset, latest=0):
 
 
 def _dict_add(node, dict, package_name):
-    '''Help function for generating dependency dictionary'''
+    """Help function for generating dependency dictionary"""
     if node.name in dict.keys():
         if package_name not in dict[node.name]:
             dict[node.name].append(package_name)
@@ -29,7 +29,7 @@ def _dict_add(node, dict, package_name):
 
 
 def dep_dict_stats(dataset, latest=0):
-    '''returns information on dependencies'''
+    """returns information on dependencies"""
     dep_dict = dependency_dictionary(dataset, latest)
     number_of_packages = []
     for key in dep_dict.keys():
@@ -38,6 +38,7 @@ def dep_dict_stats(dataset, latest=0):
     number_of_packages.sort()
 
     return number_of_packages[-10:] #10 most used dependencies
+
 
 def dependency_dictionary_with_versions(dataset, latest=0):
     dep_dict = {}
@@ -48,6 +49,7 @@ def dependency_dictionary_with_versions(dataset, latest=0):
         else:
             _dict_add_versions(package[-1], dep_dict, package[-1].name, package[-1].version, depth=0)
     return dep_dict
+
 
 def _dict_add_versions(node, dictionary, package_name, package_version, depth):
     if node.name in dictionary.keys():
@@ -67,6 +69,7 @@ def _dict_add_versions(node, dictionary, package_name, package_version, depth):
         for dependency in node.dependencies:
             _dict_add_versions(dependency, dictionary, package_name, package_version, depth+1)
 
+
 def dep_dict_stats_versions(dataset, simplify=0):
     dict = dependency_dictionary_with_versions(dataset)
     most_popular_list = []
@@ -85,9 +88,8 @@ def dep_dict_stats_versions(dataset, simplify=0):
     return most_popular_dict
 
 
-
 def total_number_of_deps(dataset):
-    '''Returns list of all dependencies in dataset'''
+    """Returns list of all dependencies in dataset"""
     list_of_unique_dependencies = []
     for package in dataset.values():
         for version in package:
@@ -98,7 +100,7 @@ def total_number_of_deps(dataset):
 
 
 def _dfs_name_search(node, list):
-    '''Help function for deps list above'''
+    """Help function for deps list above"""
     if node.name not in list:
         list.append(node.name)
     if node.dependencies != []:

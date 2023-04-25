@@ -12,6 +12,7 @@ import violin_plots
 import matplotlib.pyplot as plt
 import timeline_plot
 import dependency_exists_plot
+import subprocess
 
 serialized_dir = '../serialized/2023-02-12'
 
@@ -52,6 +53,7 @@ if __name__ == '__main__':
     dataset = load_data_set()
     print("Finished loading dataset:", len(dataset), "packages")
     # Metrics about the trees
+
     num = 0
     for package in dataset.values():
         num += len(package)
@@ -97,6 +99,15 @@ if __name__ == '__main__':
     print(better_metrics.depth_of_common_dependencies(dataset, 1))
     print(better_metrics.stats_for_most_common_deps(dataset))'''
 
+    common_deps = [
+        'inherits', 'minimist', 'wrappy', 'once',
+        'string_decoder', 'safe-buffer', 'lodash', 'has', 'function-bind', 'readable-stream', 'ms']
+
+    for common_dep in common_deps:
+        p = common_deps_parents.unique_parents(dataset, common_dep)
+        print(f"{common_dep} {len(p)}")
+
     #violin_plots.violin_plots(dataset)
     #timeline_plot.timeline_plot(dataset)
-    dependency_exists_plot.existence_timeline_plot(dataset)
+    #dependency_exists_plot.existence_timeline_plot(dataset)
+

@@ -1,5 +1,6 @@
 #import matplotlib.pyplot as plt
 
+
 def tree_depth_and_edges(node):
     '''Takes a root node and returns a list [tree_depth, tree_edges]'''
     depth_list = []

@@ -1,6 +1,34 @@
 from dependency_tree.dependency_node import DependencyNode
 
 
+def unique_parents(dataset, dependency):
+    """
+    Count number of unique parents of some dependency in all packages in all versions
+    """
+    parents_set = set()  # Use a set to keep track of all parents
+
+    for package_versions in dataset.values():
+        for version in package_versions:
+            _unique_parents_dfs(version, dependency, parents_set)
+
+    return parents_set
+
+
+def _unique_parents_dfs(tree_node, dependency, parents_set, parent_name=None):
+    """
+    Return a list of unique parents to dependency in some dependency tree
+    """
+    if tree_node.name == dependency and parent_name:
+        parents_set.add(parent_name)
+    for child_node in tree_node.dependencies:
+        _unique_parents_dfs(child_node, dependency, parents_set, tree_node.name)
+
+
+# ---
+# The two functions below here find parents in the last version of packages
+# ---
+
+
 def common_deps_parents(dataset, dependencies):
     """
     This function looks at the latest version for every package, and for every dependency in dependencies,
@@ -35,4 +63,3 @@ def _dependency_parent_search(node, dependency_hash, dependency_parents, root, p
             dependency_parents[dependency_hash[node.name]][parent_node.name] = 1
     for child in node.dependencies:
         _dependency_parent_search(child, dependency_hash, dependency_parents, root, node, parents_in_tree)
-
